@@ -1,0 +1,5 @@
+### Step 1. Log into the server
+ssh qdowling@minnie.jbpc-np.mbl.edu
+
+### Step 2. Navigate to the data
+cd 
