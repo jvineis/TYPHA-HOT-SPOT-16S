@@ -2,7 +2,7 @@
 
 ## We will keep records here of how we analyze the 16S rRNA gene sequencing for the DOE HOT SPOTS in HOT MOMENTS project
 
-## OLIGOTYPING
+## OLIGOTYPING - https://merenlab.org/2013/11/04/oligotyping-best-practices/
 
 # First log into the MBL servers
     
@@ -48,6 +48,22 @@
 ### Conduct the entropy analysis
 
     entropy-analysis Methanosarcina-for-oligotyping-padded.fa
+
+## Have a look at the pdf of the entropy to explore for oligotype candidate positions
+
+    rsync -HalP qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosarcina-for-oligotyping-padded.fa-ENTROPY.png /directory/of/choice/
+
+## Now we begin the real work - Oligotyping
+
+    oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268 -M 50
+
+### The above is an example that I used when oligotyping Mehanonsarcina. The pieces of the command are 1) the oligotype command 2) the padded fasta file that I used to calculate entropy 3) the Entropy file 4) The candidate positions to oligotype (they follow the "-C") and the 5) minimum substantitive abundance following the "-M" flag. 
+
+### I made the decision to use those three positions (354, 5, and 268) because they had the highest entropy in the Methanosarcina-for-oligotyping-padded.fa-ENTROPY file. 
+
+## Lets explore the results of our first oligotyping run to identify what other positions are informative and needed to reduce the entropy. All of the important information is in the output of the oligotyping directory HTML-OUTPUT/index.html
+
+
 
     
 
