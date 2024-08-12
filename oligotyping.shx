@@ -1,0 +1,6 @@
+#!/usr/bin bash
+
+grep Methanosarcina taxbyseq-1721839728606.tsv > Methanosarcina-taxbyseq.tsv
+python ~/scripts/convert-vamps-to-oligotyping.py Methanosarcina-taxbyseq.tsv Methanosarcina-for-oligotyping.fa
+o-pad-with-gaps Methanosarcina-for-oligotyping.fa -o Methanosarcina-for-oligotyping-padded.fa
+entropy-analysis Methanosarcina-for-oligotyping-padded.fa
