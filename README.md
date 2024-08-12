@@ -41,6 +41,18 @@
 
     python convert-vamps-to-oligotyping.py Methanosarcina-taxbyseq.tsv Methanosarcina-for-oligotyping.fa
 
+### Pad the fasta file with gaps "-" 
+
+    o-pad-with-gaps Methanosarcina-for-oligotyping.fa -o Methanosarcina-for-oligotyping-padded.fa
+
+### Conduct the entropy analysis
+
+    entropy-analysis Methanosarcina-for-oligotyping-padded.fa
+
+    
+
+
+
 
     
 
