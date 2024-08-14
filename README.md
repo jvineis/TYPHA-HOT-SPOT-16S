@@ -22,7 +22,7 @@
 
 # Now copy the file to the new directory you created on the MBL server. Do this on your computer
 
-    rsync -HalP Sequence_Matrix_File qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix
+    scp Sequence_Matrix_File qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix
 
 # Make oligotyping alive on minnie
 
@@ -30,8 +30,8 @@
 
 # Copy important scripts into the directory (oligotyping.shx and convert-vamps-to-oligotyping.py). Download them from this git and then use rsync to place them into the working directory. Here is an example of how I moved one of the files 
 
-    rsync -HalP oligotyping.shx qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
-    rsync -HalP convert-vamps-to-oligotyping.py qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
+    scp oligotyping.shx qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
+    scp convert-vamps-to-oligotyping.py qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
 
 # All the steps for oligotyping are in the oligotyping.shx file. but we are going to go through them here
 ### The first step is to grab all the line in the Sequence_Matrix_File that have the genus of interest. 
@@ -54,26 +54,37 @@
 
     entropy-analysis Methanosarcina-for-oligotyping-padded.fa
 
-## Have a look at the pdf of the entropy to explore for oligotype candidate positions
+## Have a look at the pdf of the entropy to explore for oligotype candidate positions. in personal computer terminal window, cd to directory where you want the output files to go, and then you can just put ' .' (space, period) at the end to move it to your current directory.
 
-    rsync -HalP qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosarcina-for-oligotyping-padded.fa-ENTROPY.png /directory/of/choice/
+    scp qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosarcina-for-oligotyping-padded.fa-ENTROPY.png .
 
-## Now we begin the real work - Oligotyping but first you need to activate the oligotyping code in minnie
+## Once you look at the png or pdf (either works) on your computer, write down the top three entropy positions. You can also look at the ENTROPY file (not the pdf or png one, just ends in ENTROPY) in terminal and look at the top positions. Those are needed for the oligotyping command! No more than three.
+
+    head Methanosaeta-for-oligotyping-padded.fa-ENTROPY
+
+## Now we begin the real work: oligotype, fasta file, padded entropy file, -C, top 3 positions of entropy that you found above, -M 50 (minimum substantiative abundance of 50)
 
     oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268 -M 50
 
-### The above is an example that I used when oligotyping Mehanonsarcina. The pieces of the command are 1) the oligotype command 2) the padded fasta file that I used to calculate entropy 3) the Entropy file 4) The candidate positions to oligotype (they follow the "-C") and the 5) minimum substantitive abundance following the "-M" flag. 
+### The above is an example that I used when oligotyping Methanonsarcina. The pieces of the command are 1) the oligotype command 2) the padded fasta file that I used to calculate entropy 3) the Entropy file 4) The candidate positions to oligotype (they follow the "-C") and the 5) minimum substantitive abundance following the "-M" flag. 
 
-### I made the decision to use those three positions (354, 5, and 268) because they had the highest entropy in the Methanosarcina-for-oligotyping-padded.fa-ENTROPY file. .
+### I made the decision to use those three positions (354, 5, and 268) because they had the highest entropy in the Methanosarcina-for-oligotyping-padded.fa-ENTROPY file.
 
-## HOW TO EXPORT the results of the oligotyping run. This will be run in your computers terminal (not the one you have minnie on)
+## When Oligotyping is done, it will give you a message that tells you the path to the output files on the server, for example:
+# View results in your browser: "/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/Methanosaeta-for-oligotyping-padded-sc4-s1-a0.0-A0-M50/HTML-OUTPUT/index.html"
+# Just copy the 'automounts...OUTPUT" part, not the index part
 
-    rsync -HalP qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanosarcina/Methanosarcina-for-oligotyping-padded-sc3-s1-a0.0-A0-M50/HTML-OUTPUT /location/on/your/computer/
+## HOW TO EXPORT the results of the oligotyping run - On your computers terminal, use scp, minnieaddress.edu:/automounts etc see below. make sure the end has 'OUTPUT/* .' for it to work.
+
+    scp qdowling@minnie.jbpc-np.mbl.edu:/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanosarcina/Methanosarcina-for-oligotyping-padded-sc3-s1-a0.0-A0-M50/HTML-OUTPUT/* .
    
-## Lets explore the results of our first oligotyping run to identify what other positions are informative and needed to reduce the entropy. All of the important information is in the output of the oligotyping directory HTML-OUTPUT/index.html
+## Explore the oligotyping directory HTML-OUTPUT in the index.html link. This will show you the most abundant oligotypes and which ones have more entropy to further oligotype.
 
+## When you find another oligotype to further explore, write down the position number you want to add and add it to your original string of numbers with the oligotyping command (e.g. adding 52)
 
+    oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268,52 -M 50
 
+# Can add multiple new oligotyping spots at a time, but keep it as low as possible
     
 
 
