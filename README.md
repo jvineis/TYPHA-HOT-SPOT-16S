@@ -71,8 +71,8 @@
 ### I made the decision to use those three positions (354, 5, and 268) because they had the highest entropy in the Methanosarcina-for-oligotyping-padded.fa-ENTROPY file.
 
 ## When Oligotyping is done, it will give you a message that tells you the path to the output files on the server, for example:
-# View results in your browser: "/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/Methanosaeta-for-oligotyping-padded-sc4-s1-a0.0-A0-M50/HTML-OUTPUT/index.html"
-# Just copy the 'automounts...OUTPUT" part, not the index part
+### View results in your browser: "/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/Methanosaeta-for-oligotyping-padded-sc4-s1-a0.0-A0-M50/HTML-OUTPUT/index.html"
+### Just copy the 'automounts...OUTPUT" part, not the index part
 
 ## HOW TO EXPORT the results of the oligotyping run - On your computers terminal, use scp, minnieaddress.edu:/automounts etc see below. make sure the end has 'OUTPUT/* .' for it to work.
 
