@@ -42,6 +42,10 @@
 
     python convert-vamps-to-oligotyping.py Methanosarcina-taxbyseq.tsv Methanosarcina-for-oligotyping.fa
 
+### Load the oligotyping codebase in minnie
+
+    module load oligotyping/mamba-20240321
+
 ### Pad the fasta file with gaps "-" 
 
     o-pad-with-gaps Methanosarcina-for-oligotyping.fa -o Methanosarcina-for-oligotyping-padded.fa
@@ -54,7 +58,7 @@
 
     rsync -HalP qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosarcina-for-oligotyping-padded.fa-ENTROPY.png /directory/of/choice/
 
-## Now we begin the real work - Oligotyping
+## Now we begin the real work - Oligotyping but first you need to activate the oligotyping code in minnie
 
     oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268 -M 50
 
