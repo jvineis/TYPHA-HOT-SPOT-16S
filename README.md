@@ -37,12 +37,13 @@
 
 # All the steps for oligotyping are in the oligotyping.shx file. but we are going to go through them here
 ### The first step is to grab all the line in the Sequence_Matrix_File that have the genus of interest. 
+#### Right now I am doing Methanothrix, previously known as Methanosaeta
 
-    grep Methanothrix taxbyseq-1721839728606.tsv > Methanothrix-taxbyseq.tsv
+    grep Methanosaeta taxbyseq-1721839728606.tsv > Methanosaeta-taxbyseq.tsv
 
 ### Convert the Methanosarcina-taxbyseq.tsv to a fasta file for oligotyping
 
-    python convert-vamps-to-oligotyping.py Methanosarcina-taxbyseq.tsv Methanosarcina-for-oligotyping.fa
+    python convert-vamps-to-oligotyping.py Methanosaeta-taxbyseq.tsv Methanosaeta-for-oligotyping.fa
 
 ### Load the oligotyping codebase in minnie
 
@@ -50,7 +51,7 @@
 
 ### Pad the fasta file with gaps "-" 
 
-    o-pad-with-gaps Methanosarcina-for-oligotyping.fa -o Methanosarcina-for-oligotyping-padded.fa
+    o-pad-with-gaps Methanosaeta-for-oligotyping.fa -o Methanosaeta-for-oligotyping-padded.fa
 
 ### Conduct the entropy analysis
 
@@ -58,7 +59,7 @@
 
 ## Have a look at the pdf of the entropy to explore for oligotype candidate positions. in personal computer terminal window, cd to directory where you want the output files to go, and then you can just put ' .' (space, period) at the end to move it to your current directory.
 
-    scp qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosarcina-for-oligotyping-padded.fa-ENTROPY.png .
+    scp qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/Methanosaeta-for-oligotyping-padded.fa-ENTROPY.png .
 
 ## Once you look at the png or pdf (either works) on your computer, write down the top three entropy positions. You can also look at the ENTROPY file (not the pdf or png one, just ends in ENTROPY) in terminal and look at the top positions. Those are needed for the oligotyping command! No more than three.
 
@@ -66,7 +67,7 @@
 
 ## Now we begin the real work: oligotype, fasta file, padded entropy file, -C, top 3 positions of entropy that you found above, -M 50 (minimum substantiative abundance of 50)
 
-    oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268 -M 50
+    oligotype Methanosaeta-for-oligotyping-padded.fa Methanosaeta-for-oligotyping-padded.fa-ENTROPY -C 354,5,268 -M 50
 
 ### The above is an example that I used when oligotyping Methanonsarcina. The pieces of the command are 1) the oligotype command 2) the padded fasta file that I used to calculate entropy 3) the Entropy file 4) The candidate positions to oligotype (they follow the "-C") and the 5) minimum substantitive abundance following the "-M" flag. 
 
@@ -78,13 +79,13 @@
 
 ## HOW TO EXPORT the results of the oligotyping run - On your computers terminal, use scp, minnieaddress.edu:/automounts etc see below. make sure the end has 'OUTPUT/* .' for it to work.
 
-    scp qdowling@minnie.jbpc-np.mbl.edu:/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanosarcina/Methanosarcina-for-oligotyping-padded-sc3-s1-a0.0-A0-M50/HTML-OUTPUT/* .
+    scp qdowling@minnie.jbpc-np.mbl.edu:/automounts/workspace/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanosaeta/Methanosaeta-for-oligotyping-padded-sc3-s1-a0.0-A0-M50/HTML-OUTPUT/* .
    
 ## Explore the oligotyping directory HTML-OUTPUT in the index.html link. This will show you the most abundant oligotypes and which ones have more entropy to further oligotype.
 
 ## When you find another oligotype to further explore, write down the position number you want to add and add it to your original string of numbers with the oligotyping command (e.g. adding 52)
 
-    oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268,52 -M 50
+    oligotype Methanosaeta-for-oligotyping-padded.fa Methanosaeta-for-oligotyping-padded.fa-ENTROPY -C 354,5,268,52 -M 50
 
 ### Best practice is to only add one position at a time. See if multiple oligotypes have high entropy at one spot.
     
