@@ -16,7 +16,7 @@
 
     cd /directory/containing/Sequence_Matrix_File
 ### Quincy:
-    Desktop/OneDriveMBL/etc
+    cd Users/quincydowling/Desktop/OneDriveMBL/etc
 
 # Make sure its the file you expect by exploring using head using your computer
 
