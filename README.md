@@ -10,11 +10,13 @@
 
 # change to the directory where you will operate. 
 
-    cd /workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
+    cd /workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix
 
 # in a new terminal copy the text file from my computer downloaded from VAMPs(https://vamps2.mbl.edu/) that contains the taxa and abundance. This file is very specific and is called "Sequence Matrix File (TaxBySeq -- counts matrix)"
 
     cd /directory/containing/Sequence_Matrix_File
+### Quincy:
+    Desktop/OneDriveMBL/etc
 
 # Make sure its the file you expect by exploring using head using your computer
 
@@ -84,7 +86,7 @@
 
     oligotype Methanosarcina-for-oligotyping-padded.fa Methanosarcina-for-oligotyping-padded.fa-ENTROPY -C 354,5,268,52 -M 50
 
-# Can add multiple new oligotyping spots at a time, but keep it as low as possible
+### Best practice is to only add one position at a time. See if multiple oligotypes have high entropy at one spot.
     
 
 
