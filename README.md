@@ -88,6 +88,17 @@
     oligotype Methanosaeta-for-oligotyping-padded.fa Methanosaeta-for-oligotyping-padded.fa-ENTROPY -C 354,5,268,52 -M 50
 
 ### Best practice is to only add one position at a time. See if multiple oligotypes have high entropy at one spot.
+
+## Once you have finished the oligotyping, you will go through a series of steps to analyze the community composition using the phyloseq package in R. 
+
+#### 1 Edit the final output matrix file "MATRIX-COUNT.txt" produced by oligotyping. This file needs to be transposed so the header contais the sample names and each row begins with the oligotyping id. 
+
+#### 2.  You will need the taxonomy for each of the representative sequences. VSEARCH is the software used to search each of the sequences against the SILVA taxonomy (or your database of choice). The command below begins with activating the vsearch environment (https://github.com/torognes/vsearch). The vsearch command sarting on the line below is followed by the --usearch_global flag indicating a global vs. local search. The fasta file containing the node hits is listed "OLIGO-REPRESENTATIVES.fasta". This file is contained in the output of the oligotyping, then the --dbflag is used to direct vsearch to the location of the silva database and the --blast6out defines the format of the hits. The final flag, --id, indicates the minimum percent identity. In the example below, 60% of the positions in the alignment between the reference and queried must match or nothing will be reported for this oligotype. Pay attention to the vsearch output to see if any of the sequences were below the threshold.
+
+    module load vsearch
+    vsearch --usearch_global OLIGO-REPRESENTATIVES.fasta --db /databases/silva/138.1 --blast6out NODE-HITS.txt --id 0.6
+
+#### 3.  Open the phyloseq 
     
 
 
