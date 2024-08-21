@@ -98,7 +98,8 @@
     module load vsearch
     vsearch --usearch_global OLIGO-REPRESENTATIVES.fasta --db /databases/silva/138.1 --blast6out NODE-HITS.txt --id 0.6
 
-#### 3.  Open the phyloseq 
+#### 3.  Open the phyloseq-oligotype-analysis.R on your machine and if any of the libraries fail to load, you will need to install :) The version of R should be 4.3.3. 
+
     
 
 
