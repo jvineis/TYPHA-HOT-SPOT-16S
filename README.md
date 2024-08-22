@@ -1,8 +1,8 @@
 # TYPHA-HOT-SPOT-16S
 
-## We will keep records here of how we analyze the 16S rRNA gene sequencing for the DOE HOT SPOTS in HOT MOMENTS project
+### We will keep records here of how we analyze the 16S rRNA gene sequencing for the DOE HOT SPOTS in HOT MOMENTS project
 
-## OLIGOTYPING - https://merenlab.org/2013/11/04/oligotyping-best-practices/
+### We are using a combination of VAMPS - (https://vamps2.mbl.edu/) and OLIGOTYPING - (https://merenlab.org/2013/11/04/oligotyping-best-practices/) to analyze several genera of interest that were abundant along the Typha transect located at the Plum Island Ecosystem LTER.
 
 # First log into the MBL servers
     
@@ -15,7 +15,9 @@
 # in a new terminal copy the text file from my computer downloaded from VAMPs(https://vamps2.mbl.edu/) that contains the taxa and abundance. This file is very specific and is called "Sequence Matrix File (TaxBySeq -- counts matrix)"
 
     cd /directory/containing/Sequence_Matrix_File
+    
 ### Quincy:
+
     cd Users/quincydowling/Desktop/OneDriveMBL/etc
 
 # Make sure its the file you expect by exploring using head using your computer
