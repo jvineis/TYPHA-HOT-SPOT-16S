@@ -36,6 +36,7 @@
 
     scp oligotyping.shx qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
     scp convert-vamps-to-oligotyping.py qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
+    scp sample_list.txt qdowling@minnie.jbpc-np.mbl.edu:/workspace/cardonlab/DOE-THS-TRANSECT/OLIGOTYPING/Methanothrix/
 
 # All the steps for oligotyping are in the oligotyping.shx file. but we are going to go through them here
 ### The first step is to grab all the line in the Sequence_Matrix_File that have the genus of interest. 
@@ -45,7 +46,7 @@
 
 ### Convert the Methanosarcina-taxbyseq.tsv to a fasta file for oligotyping
 
-    python convert-vamps-to-oligotyping.py Methanosaeta-taxbyseq.tsv Methanosaeta-for-oligotyping.fa
+    python convert-vamps-to-oligotyping.py Methanosaeta-taxbyseq.tsv Methanosaeta-for-oligotyping.fa sample_list.txt
 
 ### Load the oligotyping codebase in minnie
 
