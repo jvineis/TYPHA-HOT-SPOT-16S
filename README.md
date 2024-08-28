@@ -104,9 +104,18 @@
 ##### First cd to the directory in on the server where the final oligotyping output files are, then activate vsearch
 
     module load vsearch
-    vsearch --usearch_global OLIGO-REPRESENTATIVES.fasta --db /databases/silva/138.1 --blast6out NODE-HITS.txt --id 0.6
+    sed 's/-//g' OLIGO-REPRESENTATIVES.fasta > OLIGO-REPRESENTATIVES-fix.fasta
+    vsearch --usearch_global OLIGO-REPRESENTATIVES-fix.fasta --db /databases/silva/138.1 --blast6out NODE-HITS.txt --id 0.6
 
 #### 3.  Open the phyloseq-oligotype-analysis.R on your machine and if any of the libraries fail to load, you will need to install :) The version of R should be 4.3.3. 
+
+#### Conduct a sanity check on the number of sequences using a summary of the sequence count that you can make using the command below - for your genus of course
+
+    grep ">" Nitrosomonadaceae-for-oligotyping-padded.fa | cut -f 2 -d "_" | sort | uniq -c
+
+
+
+
 
     
 
