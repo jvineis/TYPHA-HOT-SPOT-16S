@@ -98,20 +98,25 @@
 ## Once you have finished the oligotyping, results can be analyzed using the phyloseq package in R and/or using anvi'o. Starting with Anvi'o:
 
 ### Anvi'o:
-#### 1. cd to the output of your final oligotyping round; ends with -M50. Inside that directory should be the MATRIX-PERCENT.txt, MATRIX-COUNT.txt and NODE-HITS.txt files. 
-###### (on the server) view the files and convert node hits using python script (via silva database):
+#### 1. cd to the output of your final oligotyping round; ends with -M50. Inside that directory should be the MATRIX-PERCENT.txt and MATRIX-COUNT.txt files. Use Vsearch to create NODE-HITS.txt file.
+###### (on the server) view the files and load vsearch
     cd /workspace/whateverdirectory/Methanosaeta-for-oligotyping-padded-sc7-s1-a0.0-A0-M50
+    module load vsearch
+    sed 's/-//g' OLIGO-REPRESENTATIVES.fasta > OLIGO-REPRESENTATIVES-fix.fasta
+    vsearch --usearch_global OLIGO-REPRESENTATIVES-fix.fasta --db /databases/silva/138.1 --blast6out NODE-HITS.txt --id 0.6
+    
+#### 2. Convert node hits using python script (via silva database):
     python  ~/scripts/convert-NODE-HITS-to-TAX.py NODE-HITS.txt /databases/silva/138.1/SILVA_138.1_SSURef_NR99_tax_silva.tax NODE-HITS-WITH-TAX.txt
 
-#### scp these files to your computer (MATRIX-PERCENT.txt, MATRIX-COUNT.txt, and NODE-HITS-WITH-TAX.txt). Remember the period at the end of an scp line will copy the files to your current directory.
+#### 3. scp these files to your computer (MATRIX-PERCENT.txt, MATRIX-COUNT.txt, and NODE-HITS-WITH-TAX.txt). Remember the period at the end of an scp line will copy the files to your current directory.
     ######(on your computer)
     cd /whateverdirectory/onyourcomputer/foranvio
     scp qdowling@jbpc-np.mbl.edu:/workspace/finaloutputdirectory/filename.txt .
     ###### have to scp each file one at a time.
 
-#### 2. save and open the txt files on your computer in excel. First copy the node hits info and transpose it in the same sheet so that the oligotypes are in column 1. Then copy that into the sheet with the matrix percents. Save it as a new file (e.g. MATRIX-COUNTS-WITH-TAX.txt). (with tax or with anvio??)
+#### 4. Save and open the txt files on your computer in excel. First copy the node hits info and transpose it in the sheet so that the oligotypes are in column 1. Then copy that into the sheet with the matrix percents. Save it as a new file (e.g. MATRIX-COUNTS-WITH-TAX.txt). (with tax or for anvio file??)
 
-#### 3. Activate anvio and convert the original matrix percent txt file to a .tre file. Enter the interactive interface using the .tre file and the edited matrix percent for anvio file
+#### 5. Activate anvio and convert the original matrix percent txt file to a .tre file. Enter the interactive interface using the .tre file and the edited matrix percent for anvio file
         conda activate anvio-8
         anvi-matrix-to-newick MATRIX-PERCENT.txt -o MATRIX-PERCENT.tre --transpose
         anvi-interactive -d MATRIX-PERCENT-FOR-ANVIO.txt -p  MATRIX-PERCENT-FOR-ANVIO.db -t MATRIX-PERCENT.tre --manual-mode
