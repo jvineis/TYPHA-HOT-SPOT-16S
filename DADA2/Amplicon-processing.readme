@@ -1,0 +1,51 @@
+## These are the steps to analyze the raw reads produced for the Transect and Temporal 16S amplicon libraries associated
+## with the Department of Energy Hot Spots in Hot Moments in a brackish estuary funding 
+
+### Location of the raw reads
+### /workspace/cardonlab/DOE-TEMPORAL-AMPLICONS/Av4v5
+### /workspace/cardonlab/DOE-TEMPORAL-AMPLICONS/Bv4v5
+### /workspace/cardonlab/DOE-THS-TRANSECT/Av4v5
+### /workspace/cardonlab/DOE-THS-TRANSECT/Bv4v5
+
+## Each of these datasets will be error corrected and trimmed to the same length and then merged using the following basic commands from DADA2
+
+    library(dada2)
+    library(phyloseq)
+    library(Biostrings)
+    library(ggplot2)
+
+    path <- "/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5"
+
+# Forward and reverse fastq filenames have format: SAMPLENAME_R1_001.fastq and SAMPLENAME_R2_001.fastq
+fnFs <- sort(list.files(path, pattern="_R1.fastq", full.names = TRUE))
+fnRs <- sort(list.files(path, pattern="_R2.fastq", full.names = TRUE))
+
+sample.names <- sapply(strsplit(basename(fnFs), "_R1.fastq"), `[`, 1)
+
+pdf("/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Quality-plots-R1.pdf")
+plotQualityProfile(fnFs[1:11])
+dev.off()
+
+pdf("/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Quality-plots-R2.pdf")
+plotQualityProfile(fnRs[1:11])
+dev.off()
+
+filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
+filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
+names(filtFs) <- sample.names
+names(filtRs) <- sample.names
+
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(249,200),
+                     maxN=5, maxEE=c(2,2), truncQ=2, rm.phix=TRUE,
+                     compress=TRUE, multithread=TRUE)
+head(out)
+
+errF <- learnErrors(filtFs, multithread=TRUE)
+errR <- learnErrors(filtRs, multithread=TRUE)
+
+dadaFs <- dada(filtFs, err=errF, multithread=TRUE)
+dadaRs <- dada(filtRs, err=errR, multithread=TRUE)
+
+mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=TRUE)
+seqtab <- makeSequenceTable(mergers)
+saveRDS(seqtab, "/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Av4v5-seqtab.rds")
