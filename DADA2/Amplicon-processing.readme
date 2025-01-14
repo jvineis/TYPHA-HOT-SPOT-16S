@@ -14,38 +14,49 @@
     library(Biostrings)
     library(ggplot2)
 
+    # set the path variable to the locationcontaing the fastq sequences
     path <- "/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5"
 
-# Forward and reverse fastq filenames have format: SAMPLENAME_R1_001.fastq and SAMPLENAME_R2_001.fastq
-fnFs <- sort(list.files(path, pattern="_R1.fastq", full.names = TRUE))
-fnRs <- sort(list.files(path, pattern="_R2.fastq", full.names = TRUE))
+    # Forward and reverse fastq filenames have format: SAMPLENAME_R1_001.fastq and SAMPLENAME_R2_001.fastq
+    fnFs <- sort(list.files(path, pattern="_R1.fastq", full.names = TRUE))
+    fnRs <- sort(list.files(path, pattern="_R2.fastq", full.names = TRUE))
 
-sample.names <- sapply(strsplit(basename(fnFs), "_R1.fastq"), `[`, 1)
+    sample.names <- sapply(strsplit(basename(fnFs), "_R1.fastq"), `[`, 1)
 
-pdf("/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Quality-plots-R1.pdf")
-plotQualityProfile(fnFs[1:11])
-dev.off()
+    filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
+    filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
+    names(filtFs) <- sample.names
+    names(filtRs) <- sample.names
 
-pdf("/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Quality-plots-R2.pdf")
-plotQualityProfile(fnRs[1:11])
-dev.off()
+    out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(249,200),
+                         maxN=5, maxEE=c(2,2), truncQ=2, rm.phix=TRUE,
+                         compress=TRUE, multithread=TRUE)
+  
+    errF <- learnErrors(filtFs, multithread=TRUE)
+    errR <- learnErrors(filtRs, multithread=TRUE)
 
-filtFs <- file.path(path, "filtered", paste0(sample.names, "_F_filt.fastq.gz"))
-filtRs <- file.path(path, "filtered", paste0(sample.names, "_R_filt.fastq.gz"))
-names(filtFs) <- sample.names
-names(filtRs) <- sample.names
+    dadaFs <- dada(filtFs, err=errF, multithread=TRUE)
+    dadaRs <- dada(filtRs, err=errR, multithread=TRUE)
 
-out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(249,200),
-                     maxN=5, maxEE=c(2,2), truncQ=2, rm.phix=TRUE,
-                     compress=TRUE, multithread=TRUE)
-head(out)
+    mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=TRUE)
+    seqtab <- makeSequenceTable(mergers)
+    saveRDS(seqtab, "/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Av4v5-seqtab.rds")
 
-errF <- learnErrors(filtFs, multithread=TRUE)
-errR <- learnErrors(filtRs, multithread=TRUE)
+## Merge the Av4v5 and Bv4v5 transect and temporal datasets and then filter chimeras and write tax and OTU rds files for downstream analysis using phyloseq
+## This work is conducted here /workspace/cardonlab/DOE-THS-TRANSECT/TRANSECT-TEMPORAL-COMBINED
+## There is a script /workspace/cardonlab/DOE-THS-TRANSECT/TRANSECT-TEMPORAL-COMBINED/Av4v5/Av4v5-merge-dada2-runs.R that I used to merge the transect and temporal
+## 16S merged sequences then filterd out the chimeras and the 
 
-dadaFs <- dada(filtFs, err=errF, multithread=TRUE)
-dadaRs <- dada(filtRs, err=errR, multithread=TRUE)
+    library(dada2)
+    # Merge multiple runs (if necessary)
+    st1 <- readRDS("Av4v5-temporal-seqtab.rds")
+    st2 <- readRDS("Av4v5-transect-seqtab.rds")
 
-mergers <- mergePairs(dadaFs, filtFs, dadaRs, filtRs, verbose=TRUE)
-seqtab <- makeSequenceTable(mergers)
-saveRDS(seqtab, "/workspace/cardonlab/DOE-THS-TRANSECT/Av4v5/Av4v5-seqtab.rds")
+    st.all <- mergeSequenceTables(st1, st2)
+    # Remove chimeras
+    seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
+    # Assign taxonomy
+    tax <- assignTaxonomy(seqtab, "~/scripts/DBs/silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE)
+    # Write to disk
+    saveRDS(seqtab, "seqtab-Av4v5-final.rds")
+    saveRDS(tax, "seqtab-Av4v5-tax_final.rds")
