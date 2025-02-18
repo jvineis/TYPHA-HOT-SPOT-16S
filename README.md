@@ -103,7 +103,8 @@
     cd /workspace/whateverdirectory/Methanosaeta-for-oligotyping-padded-sc7-s1-a0.0-A0-M50
     module load vsearch
     sed 's/-//g' OLIGO-REPRESENTATIVES.fasta > OLIGO-REPRESENTATIVES.fixed.fasta
-    vsearch --usearch_global OLIGO-REPRESENTATIVES.fixed.fasta --db /databases/silva/138.1/SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz --blast6out NODE-HITS.txt --id 0.6
+    sed 's/"//g' OLIGO-REPRESENTATIVES.fixed.fasta > OLIGO-REPRESENTATIVES.final.fasta
+    vsearch --usearch_global OLIGO-REPRESENTATIVES.final.fasta --db /databases/silva/138.1/SILVA_138.1_SSURef_NR99_tax_silva.fasta.gz --blast6out NODE-HITS.txt --id 0.6
     
 #### 2. Convert node hits using python script (via silva database):
     python  ~/scripts/convert-NODE-HITS-to-TAX.py NODE-HITS.txt /databases/silva/138.1/SILVA_138.1_SSURef_NR99_tax_silva.tax NODE-HITS-WITH-TAX.txt
