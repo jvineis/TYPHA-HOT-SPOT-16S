@@ -1,10 +1,1 @@
-### Step 1. Log into the Bay Paul Center server
-ssh qdowling@minnie.jbpc-np.mbl.edu
-##shortcut for the server: creating shortcut using alias
-##alias minnie="ssh qdowling@minnie.jbpc-np.mbl.edu"
-#so now just type minnie and it will type the stuff above to connect to the Bay Paul Center server
-minnie
-#enter password
 
-
-### Step 2. Navigate to the data
