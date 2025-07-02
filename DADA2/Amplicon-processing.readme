@@ -1,13 +1,28 @@
 ## These are the steps to analyze the raw reads produced for the Transect and Temporal 16S amplicon libraries associated
-## with the Department of Energy Hot Spots in Hot Moments in a brackish estuary funding 
+## with the Department of Energy Hot Spots in Hot Moments in a brackish estuary  
 
 ### Location of the raw reads
 ### /workspace/cardonlab/DOE-TEMPORAL-AMPLICONS/Av4v5
 ### /workspace/cardonlab/DOE-TEMPORAL-AMPLICONS/Bv4v5
-### /workspace/cardonlab/DOE-THS-TRANSECT/Av4v5
-### /workspace/cardonlab/DOE-THS-TRANSECT/Bv4v5
 
-## Each of these datasets will be error corrected and trimmed to the same length and then merged using the following basic commands from DADA2
+### There are three directories that correspond with the date of sequencing and collectively the three directories contain all of the amplicon sequencing data for this project (temporal data, transect data, and swab vs coring)
+### All of the sequncing was conucted at the Bay Paul Center, Marine Biological Laboratory Woods Hole. The filtered and trimmed data will be uploaded to NCBI Short Read Archive (SRA) under the project "XXXXXXX".
+### The first step in the quality filtering of the data was adaptor trimming using the program cutadapt. An example scripts used for the adaptor trimming of the data within each of the three separate run directories is shown below 
+
+#### Archaeal adaptor Trimming
+
+    #!/usr/bin/bash
+    for i in `cat x_samples.txt`; do cutadapt -g TCCAATT -o ${i}_trimmed_R2.fastq ${i}_R2.fastq; done
+    for i in `cat x_samples.txt`; do cutadapt -g GTAGC -o ${i}_trimmed_R1.fastq ${i}_R1.fastq; done
+
+#### Bacterial adaptor Trimming
+
+    #!/usr/bin/bash
+    for i in `cat x_samples.txt`; do cutadapt -g CCGTCWATT -o ${i}_trimmed_R2.fastq ${i}_R2.fastq; done
+    for i in `cat x_samples.txt`; do cutadapt -g CCAGCAGC -o ${i}_trimmed_R1.fastq ${i}_R1.fastq; done
+
+
+## Each of the data contained in the three different direcotries were error corrected and trimmed to the same length and then merged using the following basic commands from DADA2
 
     library(dada2)
     library(phyloseq)
@@ -47,16 +62,22 @@
 ## There is a script /workspace/cardonlab/DOE-THS-TRANSECT/TRANSECT-TEMPORAL-COMBINED/Av4v5/Av4v5-merge-dada2-runs.R that I used to merge the transect and temporal
 ## 16S merged sequences then filterd out the chimeras and the 
 
-    library(dada2)
-    # Merge multiple runs (if necessary)
-    st1 <- readRDS("Av4v5-temporal-seqtab.rds")
-    st2 <- readRDS("Av4v5-transect-seqtab.rds")
+    library(dada2); packageVersion("dada2")
 
-    st.all <- mergeSequenceTables(st1, st2)
+    st1 <- readRDS("../RUN-Dec-2024/Av4v5-Dec.rds")
+    st2 <- readRDS("../RUN-Jan-2025/Bv4v5-Jan.rds")
+    st3 <- readRDS("../RUN-May-2024/Av4v5-May.rds")
+
+    st.all <- mergeSequenceTables(st1, st2, st3)
+
     # Remove chimeras
     seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
+
     # Assign taxonomy
     tax <- assignTaxonomy(seqtab, "~/scripts/DBs/silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE)
+
     # Write to disk
-    saveRDS(seqtab, "seqtab-Av4v5-final.rds")
-    saveRDS(tax, "seqtab-Av4v5-tax_final.rds")
+    saveRDS(seqtab, "seqtab-MERGED-Av4v5-final.rds")
+    saveRDS(tax, "seqtab-MERGED-Av4v5-tax_final.rds")
+
+## These *.rds files can now be used as input to for your phyloseq analysis.. Either 1. Transect, 2. Temporal, or 3. Swab vs Core. 
