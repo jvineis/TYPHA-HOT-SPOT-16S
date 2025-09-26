@@ -107,7 +107,7 @@
 
 ## Visualization with Phyloseq:
 
-#### 1. Edit the final output matrix file "MATRIX-COUNT.txt" produced by oligotyping. This file needs to be transposed so the header contains the sample names and each row begins with the oligotyping id. See example file "MATRIX-COUNT-PHYLOSEQ.txt"
+#### 1. Edit the final output matrix file "MATRIX-COUNT.txt" produced by oligotyping. This file needs to be transposed so the header contains the sample names and each row begins with the oligotyping id. See example file "Methanosarcina-matrix-count-phyloseq.txt"
 
 #### 2. As we did above with Anvi'o, you will need the NODE-HITS-WITH-TAX file for taxonomy for each of the representative sequences. This uses the vsearch command. Then convert the file using the python script. 
 
