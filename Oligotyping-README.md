@@ -109,7 +109,7 @@
 
 #### 1. Edit the final output matrix file "MATRIX-COUNT.txt" produced by oligotyping. This file needs to be transposed so the header contains the sample names and each row begins with the oligotyping id. See example file "Methanosarcina-matrix-count-phyloseq.txt". Also delete the word "sample" in front of the sample names if necessary so that the sample names (now column headers) match the sample names in your metadata file.
 
-#### 2. As we did above with Anvi'o, you will need the NODE-HITS-WITH-TAX file for taxonomy for each of the representative sequences. This uses the vsearch command. Then convert the file using the python script. Once you've saved this text file, open it in excel and add a row for column headers (oligotypes, silva ID, kingdom, phylum, class etc...) and delete all the unecessary columns that say 'na'
+#### 2. As we did above with Anvi'o, you will need the NODE-HITS-WITH-TAX file for taxonomy for each of the representative sequences. This uses the vsearch command. Then convert the file using the python script. Once you've saved this text file, open it in excel and add a row for column headers (oligotypes, silva ID, kingdom, phylum, class etc...) and delete all the unecessary columns that say 'na'. THEN make one more column and copy and paste the oligotype ID's into that column and name it ASV or oligotype.
 
     cd /workspace/whateverdirectory/Methanosaeta-for-oligotyping-padded-sc7-s1-a0.0-A0-M50
     module load vsearch
